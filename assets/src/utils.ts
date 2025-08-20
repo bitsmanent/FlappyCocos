@@ -1,0 +1,1 @@
+export const rand = (m,M) => Math.random() * (M - m) + m;
