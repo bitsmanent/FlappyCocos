@@ -1,4 +1,4 @@
-import { _decorator, CCInteger, Component, director, EventKeyboard, input, Input, KeyCode } from 'cc';
+import { _decorator, CCInteger, Collider2D, Component, Contact2DType, director, EventKeyboard, input, Input, KeyCode } from 'cc';
 import { Ground } from './ground';
 import { Results } from './results';
 import { Bird } from './bird';
@@ -43,20 +43,28 @@ export class Ctrl extends Component {
         tooltip: 'Add canvas here'
     })
     public pipePool: PipePool;
+    public running: boolean;
 
     onLoad() {
         this.initListener();
         this.resetGame();
+        this.running = false;
+        director.pause();
     }
 
     initListener() {
-        input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
+        // input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
         input.on(Input.EventType.TOUCH_START, this.onTouchStart, this); /* Why TF the tutorial use this.node.on() (which doesn't works)? */
+
+        const collider = this.bird.getComponent(Collider2D);
+
+        collider.on(Contact2DType.BEGIN_CONTACT, this.onCollide, this);
     }
 
     startGame() {
         this.result.hideResult();
         director.resume();
+        this.running = true;
     }
 
     onKeyDown(ev: EventKeyboard) {
@@ -73,18 +81,27 @@ export class Ctrl extends Component {
     }
 
     onTouchStart() {
-        this.bird.fly();
+        if(this.running) {
+            this.bird.fly();
+            // this.clip.onAudioQueue(0);
+            return;
+        }
+
+        this.resetGame();
+        this.bird.reset();
+        this.startGame();
+        // this.bird.fly();
     }
 
     gameOver() {
         this.result.showResult();
+        this.running = false;
         director.pause();
     }
 
     resetGame() {
         this.result.resetScore();
         this.pipePool.reset();
-        this.startGame();
     }
 
     passPipe() {
@@ -93,5 +110,10 @@ export class Ctrl extends Component {
 
     createPipe() {
         this.pipePool.addPipe();
+    }
+
+    onCollide() {
+        /* always assuming one collider is a bird */
+        this.gameOver();
     }
 }

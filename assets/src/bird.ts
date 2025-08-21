@@ -1,4 +1,4 @@
-import { _decorator, CCFloat, Component, Vec3, Animation, tween } from 'cc';
+import { _decorator, CCFloat, Component, Vec3, Animation, tween, find } from 'cc';
 import { Ctrl } from './ctrl';
 
 const { ccclass, property } = _decorator;
@@ -17,41 +17,45 @@ export class Bird extends Component {
     })
     public jumpDuration: number = 1.5;
 
-    @property({
-        type: Ctrl,
-        tooltip: 'Ctrl component'
-    })
-    public ctrl: Ctrl;
-
     public animation: Animation;
-    public location: Vec3;
+    public game: any;
+
+    flyAnim = null;
 
     onLoad() {
         this.reset();
         this.animation = this.getComponent(Animation);
+        this.game = find('ctrl').getComponent('Ctrl');
     }
 
     reset() {
-        this.location = new Vec3(0, 0, 0);
-        this.node.setPosition(this.location);
+        if(this.flyAnim)
+            this.flyAnim.stop();
+        this.node.setPosition(0, 0);
     }
 
     fly() {
         const {x, y} = this.node.position;
-        
+
         this.animation.stop();
-        
-        tween(this.node.position)
-        .to(this.jumpDuration, new Vec3(x, y + this.jumpHeight, 0), {
-            easing: "smooth",
-            onUpdate: (target: Vec3, ratio: number) => {
-                this.node.position = target;
-            }
-        }).start();
+        if(this.flyAnim)
+            this.flyAnim.stop();
+        this.flyAnim = tween(this.node.position)
+            .to(this.jumpDuration, new Vec3(x, y + this.jumpHeight, 0), {
+                easing: "smooth",
+                onUpdate: (target: Vec3, _ratio: number) => {
+                    this.node.position = target;
+                    // this.node.setPosition(target.x, target.y);
+                },
+                onComplete: () => {
+                    this.flyAnim = null;
+                }
+            }).start();
 
         this.animation.play();
     }
 
+    update() {
+        console.log("update bird");
+    }
 }
-
-
