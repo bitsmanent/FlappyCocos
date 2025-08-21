@@ -3,6 +3,7 @@ import { Ground } from './ground';
 import { Results } from './results';
 import { Bird } from './bird';
 import { PipePool } from './pipepool';
+import { BirdAudio } from './birdaudio';
 
 const { ccclass, property } = _decorator;
 
@@ -43,6 +44,13 @@ export class Ctrl extends Component {
         tooltip: 'Add canvas here'
     })
     public pipePool: PipePool;
+
+    @property({
+        type: BirdAudio,
+        tooltip: 'Audio controller'
+    })
+    public clip: BirdAudio;
+
     public running: boolean;
 
     onLoad() {
@@ -83,7 +91,7 @@ export class Ctrl extends Component {
     onTouchStart() {
         if(this.running) {
             this.bird.fly();
-            // this.clip.onAudioQueue(0);
+            this.clip.play(0); /* swoosh */
             return;
         }
 
@@ -97,6 +105,7 @@ export class Ctrl extends Component {
         this.result.showResult();
         this.running = false;
         director.pause();
+        this.clip.play(3); /* die */
     }
 
     resetGame() {
@@ -106,6 +115,7 @@ export class Ctrl extends Component {
 
     passPipe() {
         this.result.addScore();
+        this.clip.play(1); /* point */
     }
 
     createPipe() {
@@ -113,7 +123,7 @@ export class Ctrl extends Component {
     }
 
     onCollide() {
-        /* always assuming one collider is a bird */
-        this.gameOver();
+        this.clip.play(2); /* hit */
+        this.gameOver(); /* always assuming one collider is a bird */
     }
 }
