@@ -250,12 +250,12 @@
     "_offset": {
       "__type__": "cc.Vec2",
       "x": -26,
-      "y": -160
+      "y": -161.2
     },
     "_size": {
       "__type__": "cc.Size",
-      "width": 52,
-      "height": 320
+      "width": 44.3,
+      "height": 317.9
     },
     "_id": ""
   },
@@ -272,8 +272,6 @@
       "__id__": 0
     },
     "fileId": "0bDSsqZCxPOZSsBkil5ng/",
-    "instance": null,
-    "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
   },
   {
@@ -459,13 +457,13 @@
     "_restitution": 0,
     "_offset": {
       "__type__": "cc.Vec2",
-      "x": 26,
-      "y": 160
+      "x": 26.1,
+      "y": 159.1
     },
     "_size": {
       "__type__": "cc.Size",
-      "width": 52,
-      "height": 320
+      "width": 43.7,
+      "height": 318.3
     },
     "_id": ""
   },

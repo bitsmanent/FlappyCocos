@@ -45,7 +45,6 @@ export class Bird extends Component {
                 easing: "smooth",
                 onUpdate: (target: Vec3, _ratio: number) => {
                     this.node.position = target;
-                    // this.node.setPosition(target.x, target.y);
                 },
                 onComplete: () => {
                     this.flyAnim = null;
