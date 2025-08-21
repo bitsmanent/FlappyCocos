@@ -1,1 +1,2 @@
-Slightly improved version of the FlappyBird tutorial for Cocos Creator.
+Slightly improved version of the FlappyBird game implementation from the
+official tutorial of Coco Creator.
